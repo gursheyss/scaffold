@@ -27,22 +27,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "scaffoldb",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
-}
+	Use:   "streamlinedb",
+	Short: "Streamlines database setup and management using Docker and AI",
+	Long: `StreamlineDB is a CLI tool designed to simplify and accelerate database setup and management. 
+It facilitates rapid instantiation of popular databases like PostgreSQL, MySQL, and others within Docker containers. 
+Leveraging the power of GPT-4, it can also generate database schemas, making it ideal for quickly setting up new projects or adding databases to existing ones. 
+Features include AI-driven schema generation, Docker integration for database container management, and a user-friendly interface for effortless database operations. 
+`}
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -64,5 +57,3 @@ func init() {
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
-
