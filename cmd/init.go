@@ -4,35 +4,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/charmbracelet/lipgloss"
 	"github.com/gursheyss/scaffoldb/cmd/docker"
 	"github.com/spf13/cobra"
 )
-
-// initCmd represents the init command
-var initCmd = &cobra.Command{
-	Use:   "init",
-	Short: "Initializes a new database in Docker with optional AI-generated schema",
-	Long: `The 'init' command in StreamlineDB is used to quickly set up a new database within a Docker container. 
-It provides an interactive interface to choose the type of database (e.g., PostgreSQL, MySQL) and configure basic settings. 
-Additionally, it leverages GPT-4 AI to optionally generate a database schema, streamlining the setup process for new or existing projects. 
-This command is ideal for developers who need to quickly scaffold databases for development, testing, or production environments.
-
-Example:
-
-streamlinedb init
-
-This will start the process of setting up a new database, offering choices for database type, version, and configuration. 
-If opted for, it will also generate an initial schema based on AI suggestions.`,
-
-	Run: func(cmd *cobra.Command, args []string) {
-		err := docker.CheckDockerRunning()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		fmt.Println("")
-	},
-}
 
 func init() {
 	rootCmd.AddCommand(initCmd)
@@ -48,4 +23,32 @@ func init() {
 	// initCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	initCmd.Flags().StringP("name", "n", "", "Name of project")
+}
+
+var (
+	logoStyle            = lipgloss.NewStyle().Foreground(lipgloss.Color("#FFA500")).Bold(true)
+	tipMsgStyle          = lipgloss.NewStyle().PaddingLeft(1).Foreground(lipgloss.Color("#FF8C00")).Italic(true)
+	endingMsgStyle       = lipgloss.NewStyle().PaddingLeft(1).Foreground(lipgloss.Color("#FF7F50")).Bold(true)
+	allowedDatabaseTypes = []string{"mysql", "postgres", "sqlite", "mongo"}
+)
+
+// initCmd represents the init command
+var initCmd = &cobra.Command{
+	Use:   "init",
+	Short: "Scaffold different databases with Docker",
+	Long:  "StreamlineDB's 'init' command is a CLI tool for quick database setup in Docker. It offers interactive selection, configuration, and optional AI-based schema generation. Ideal for rapid database scaffolding.",
+
+	Run: func(cmd *cobra.Command, args []string) {
+		err := docker.CheckDockerRunning()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		connectionString, err := docker.StartMySQLContainer("user", "pass", "test", 3306)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		fmt.Printf("Connection string: %v", connectionString)
+	},
 }
